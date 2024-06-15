@@ -7,7 +7,7 @@ import {
   Stack,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { BellIcon, CalendarIcon, Search2Icon } from "@chakra-ui/icons";
+import { BellIcon, CalendarIcon, Search2Icon, SettingsIcon } from "@chakra-ui/icons";
 import { NavigationContext } from "../Contexts";
 
 const MobileNav = () => {
@@ -18,13 +18,9 @@ const MobileNav = () => {
   const navItems = [
     { icon: <BellIcon />, target: "tasks", label: "Tasks" },
     { icon: <CalendarIcon />, target: "dashboard", label: "Analytics" },
-    { icon: <Search2Icon />, target: "users", label: "Users" },
+    { icon: <Search2Icon />, target: "users", label: "Members" },
+    { icon: <SettingsIcon />, target: "settings", label: "Settings" },
   ];
-
-  const handleClick = (target) => {
-    console.log(currentScreen);
-    handleScreenChange(target);
-  };
 
   return (
     <Box width="100%" bg={bgColor}>
@@ -42,7 +38,7 @@ const MobileNav = () => {
                 bg: 'transparent',
                 textColor: 'orange.500',
               }}
-              onClick={() => handleClick(item.target)}
+              onClick={() => handleScreenChange(item.target)}
               isActive={currentScreen === item.target}
               gap='5px'
             >

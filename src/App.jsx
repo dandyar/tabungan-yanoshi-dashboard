@@ -1,59 +1,75 @@
 import { ScaleFade } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import HomeView from "./components/HomeView";
-import UploadView from "./components/UploadView";
+import MemberView from "./components/MemberView";
+import DashboardView from "./components/DashboardView";
 import SkeletonView from "./components/SkeletonView";
+import SettingsView from "./components/SettingsView";
 import MobileView from "./components/MobileView";
 import { get } from "./common/api";
 import { NavigationContext } from "./Contexts.js";
 
 const App = () => {
   const [currentScreen, setCurrentScreen] = useState("tasks");
-  const [data, setData] = useState(null);
-  const [activeRequest, setActiveRequest] = useState(null);
-  const [report, setReport] = useState(null);
+  const [members, loadMembers] = useState(null);
+  const [tasks, loadTasks] = useState(null);
+  const [dashboard, setDashboard] = useState(null);
+  const [user, setUser] = useState(null);
   const [isLoading, setLoading] = useState(true);
 
   const handleScreenChange = (screen) => {
     setCurrentScreen(screen);
   };
 
-  // const fetchData = async () => {
-  //   setLoading(true); // Set loading indicator to true
-  //   try {
-  //     const getInfo = await get("info"); // Replace with your API URL
-  //     const data = await getInfo.json();
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const getMembers = await get("mgmt/members");
+      const members = await getMembers.json();
 
-  //     const getActiveRequest = await get("permintaan"); // Replace with your API URL
-  //     const activeRequest = await getActiveRequest.json();
+      const getTasks = await get("mgmt/tasks");
+      const tasks = await getTasks.json();
 
-  //     const getReport = await get("tabungan"); // Replace with your API URL
-  //     const reportList = await getReport.json();
+      const getDashboard = await get("mgmt/dashboard");
+      const dashboard = await getDashboard.json();
 
-  //     setData(data);
-  //     setActiveRequest(activeRequest);
-  //     setReport(reportList);
+      const userInfo = await get("mgmt/profile");
+      const profile = await userInfo.json();
 
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
+      loadTasks(tasks);
+      loadMembers(members);
+      setDashboard(dashboard);
+      setUser(profile);
 
-  // useEffect(() => {
-  //   if (currentScreen === "home") {
-  //     fetchData();
-  //   }
-  // }, [currentScreen]);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
-    <NavigationContext.Provider value={{handleScreenChange, currentScreen}}>
-      <MobileView>
-        {currentScreen === "tasks" && <HomeView />}
-        {currentScreen === "dashboard" && <UploadView />}
-        {currentScreen === "users" && <SkeletonView />}
-      </MobileView>
-    </NavigationContext.Provider>
+    <>
+      {isLoading ? (
+        <SkeletonView />
+      ) : (
+        <NavigationContext.Provider
+          value={{ handleScreenChange, currentScreen }}
+        >
+          <MobileView>
+            {currentScreen === "tasks" && <HomeView tasks={tasks} />}
+            {currentScreen === "dashboard" && (
+              <DashboardView dashboard={dashboard} profile={user} />
+            )}
+            {currentScreen === "users" && <MemberView members={members} />}
+            {currentScreen === "settings" && <SettingsView members={members} />}
+          </MobileView>
+        </NavigationContext.Provider>
+      )}
+    </>
   );
 };
 

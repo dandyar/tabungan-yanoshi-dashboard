@@ -13,16 +13,10 @@ import {
   StatLabel,
   StatNumber,
 } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
-import React from "react";
-import MobileView from "./MobileView";
-import GreetingText from "./GreetingText";
-import { get } from "../common/api";
+import React, { useEffect } from "react";
+import { BellIcon, CalendarIcon, Search2Icon } from "@chakra-ui/icons";
 
-const HomeView = ({ onSwitchScreen, user, activeRequest, report }) => {
-  const onReport = () => {
-    onSwitchScreen("upload");
-  };
+const HomeView = ({ tasks }) => {
 
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString("en-US", {
@@ -37,45 +31,58 @@ const HomeView = ({ onSwitchScreen, user, activeRequest, report }) => {
   }
 
   return (
-    <VStack w='100%' padding={5} paddingTop="2rem">
-      <Box w="100%">
-        <Text fontSize="2xl" fontWeight='bold' marginBottom="1rem">
+    <VStack w="100%" p={5} pt="2rem">
+      <Flex w="100%" gap='15px'>
+        <Flex
+          backgroundColor="orange"
+          w={10}
+          h={10}
+          alignItems="center"
+          justifyContent="center"
+          borderRadius="xl"
+        >
+          <BellIcon boxSize={6} color="#fff" />
+        </Flex>
+        <Text fontSize="2xl" fontWeight="bold" marginBottom="1rem">
           Pending Task
         </Text>
+      </Flex>
 
-        {report && report.length > 0 ? (
-          <Stack spacing="2">
-            {report.map((item) => (
-              <Card
-                w="100%"
-                variant="outline"
-                border="none"
-                borderRadius="3xl"
-                key={item.id}
-              >
-                <CardBody>
-                  <Box>
-                    <Heading
-                      size="xs"
-                      textTransform="uppercase"
-                      textColor="green.300"
-                    >
-                      + IDR {formatAmount(item.credit_amount)}
-                    </Heading>
-                    <Text pt="2" fontSize="sm">
-                      {item.created_at}
-                    </Text>
-                  </Box>
+      {tasks && tasks.length > 0 ? (
+        <Stack spacing="2" width='100%'>
+          {tasks.map((item) => (
+            <Card
+              w="100%"
+              variant="outline"
+              border="none"
+              borderRadius="3xl"
+              key={item.id}
+            >
+              <CardBody>
+                  <Flex justifyContent="space-between">
+                    <Box>
+                      <Heading size="xs" textTransform="uppercase">
+                        Bukti transfer
+                      </Heading>
+                      <Text pt="2" fontSize="sm">
+                        {item?.created_at}
+                      </Text>
+                    </Box>
+                    <Flex alignItems="center">
+                      <Text textColor="blue.300" fontWeight="semibold">
+                        PENDING
+                      </Text>
+                    </Flex>
+                  </Flex>
                 </CardBody>
-              </Card>
-            ))}
-          </Stack>
-        ) : (
-          <Text textAlign="center" textColor="gray.600" fontStyle="italic">
-            No data
-          </Text>
-        )}
-      </Box>
+            </Card>
+          ))}
+        </Stack>
+      ) : (
+        <Text textAlign="center" textColor="gray.600" fontStyle="italic">
+          No data
+        </Text>
+      )}
     </VStack>
   );
 };
