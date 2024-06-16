@@ -13,7 +13,6 @@ const App = () => {
   const [currentScreen, setCurrentScreen] = useState("tasks");
   const [members, loadMembers] = useState(null);
   const [tasks, loadTasks] = useState(null);
-  const [dashboard, setDashboard] = useState(null);
   const [user, setUser] = useState(null);
   const [isLoading, setLoading] = useState(true);
   const [navOpened, openNav] = useState(true);
@@ -30,15 +29,11 @@ const App = () => {
       const getTasks = await get("mgmt/tasks");
       const tasks = await getTasks.json();
 
-      const getDashboard = await get("mgmt/dashboard");
-      const dashboard = await getDashboard.json();
-
       const userInfo = await get("mgmt/profile");
       const profile = await userInfo.json();
 
       loadTasks(tasks);
       loadMembers(members);
-      setDashboard(dashboard);
       setUser(profile);
 
       setLoading(false);
@@ -61,9 +56,7 @@ const App = () => {
         >
           <MobileView>
             {currentScreen === "tasks" && <HomeView loadTasks={loadTasks} tasks={tasks} />}
-            {currentScreen === "dashboard" && (
-              <DashboardView dashboard={dashboard} profile={user} />
-            )}
+            {currentScreen === "dashboard" && <DashboardView profile={user} />}
             {currentScreen === "users" && <MemberView members={members} />}
             {currentScreen === "settings" && <SettingsView members={members} />}
           </MobileView>

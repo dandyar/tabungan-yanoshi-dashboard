@@ -14,19 +14,39 @@ import {
   StatNumber,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import MobileView from "./MobileView";
 import GreetingText from "./GreetingText";
 import { get } from "../common/api";
 
-const Dashboard = ({ dashboard, profile }) => {
-  const onReport = () => {
-    onSwitchScreen("upload");
+const Dashboard = ({ profile }) => {
+
+  const [dashboard, setDashboard] = useState({
+    total_amount: 0,
+    active_requests: 0,
+    member_count: 0
+  });
+
+  const getDashboard = async () => {
+    try {
+      console.log("update dashboard");
+      const getRequest = await get("mgmt/dashboard");
+      const response = await getRequest.json();
+      setDashboard(response);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
+
+
+  useEffect(() => {
+    getDashboard();
+  }, []);
 
   function formatAmount(number) {
     return number.replace(/\B(?=(?=\d*\.)(\d{3})+(?!\d))/g, ",");
   }
+  
 
   return (
     <VStack padding={5} paddingTop="2rem">
