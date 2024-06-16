@@ -1,4 +1,3 @@
-import { ScaleFade } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import HomeView from "./components/HomeView";
 import MemberView from "./components/MemberView";

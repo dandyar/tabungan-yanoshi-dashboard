@@ -1,20 +1,15 @@
 import {
-  Button,
   Box,
   Flex,
   Text,
   VStack,
   Card,
   CardBody,
-  Divider,
   Heading,
   Stack,
-  Stat,
-  StatLabel,
-  StatNumber,
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
-import { BellIcon, CalendarIcon, Search2Icon } from "@chakra-ui/icons";
+import { BellIcon } from "@chakra-ui/icons";
 import TaskDetail from "./TaskDetail";
 import { NavigationContext } from "../Contexts";
 import { get } from "../common/api";

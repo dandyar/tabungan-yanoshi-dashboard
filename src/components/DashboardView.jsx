@@ -1,21 +1,13 @@
 import {
-  Button,
-  Box,
   Flex,
   Text,
   VStack,
   Card,
-  CardBody,
-  Divider,
-  Heading,
-  Stack,
   Stat,
   StatLabel,
   StatNumber,
 } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
 import React, { useState, useEffect } from "react";
-import MobileView from "./MobileView";
 import GreetingText from "./GreetingText";
 import { get } from "../common/api";
 

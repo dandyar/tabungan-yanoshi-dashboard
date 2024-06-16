@@ -4,7 +4,7 @@ import {
     Text,
     VStack
   } from "@chakra-ui/react";
-  import React, { useEffect } from "react";
+  import React from "react";
   import { SettingsIcon } from "@chakra-ui/icons";
   import { destroy } from "../common/api";
 
