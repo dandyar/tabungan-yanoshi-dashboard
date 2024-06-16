@@ -17,8 +17,9 @@ import React, { useContext, useState } from "react";
 import { BellIcon, CalendarIcon, Search2Icon } from "@chakra-ui/icons";
 import TaskDetail from "./TaskDetail";
 import { NavigationContext } from "../Contexts";
+import { get } from "../common/api";
 
-const HomeView = ({ tasks }) => {
+const HomeView = ({ loadTasks, tasks }) => {
   const [taskOpened, openTask] = useState(null);
   const [taskDetail, setTaskDetail] = useState(false);
   const { openNav } = useContext(NavigationContext);
@@ -42,10 +43,29 @@ const HomeView = ({ tasks }) => {
     openNav(false);
   };
 
+  const fetchTasks = async () => {
+    try {
+      console.log("fetch tasks");
+      const getTasks = await get("mgmt/tasks");
+      const tasks = await getTasks.json();
+      loadTasks(tasks);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const closeTaskDetail = async () => {
+    await fetchTasks();
+
+    console.log("close task detail");
+    openTask(false);
+    openNav(true);
+  };
+
   return (
     <>
       {taskOpened ? (
-        <TaskDetail openTask={openTask} taskDetail={taskDetail} />
+        <TaskDetail onBack={closeTaskDetail} taskDetail={taskDetail} />
       ) : (
         <VStack w="100%" p={5} pt="2rem">
           <Flex w="100%" gap="15px">

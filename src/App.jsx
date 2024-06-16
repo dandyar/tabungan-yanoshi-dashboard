@@ -60,7 +60,7 @@ const App = () => {
           value={{ handleScreenChange, currentScreen, navOpened, openNav }}
         >
           <MobileView>
-            {currentScreen === "tasks" && <HomeView tasks={tasks} />}
+            {currentScreen === "tasks" && <HomeView loadTasks={loadTasks} tasks={tasks} />}
             {currentScreen === "dashboard" && (
               <DashboardView dashboard={dashboard} profile={user} />
             )}

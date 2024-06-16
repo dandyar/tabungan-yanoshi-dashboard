@@ -10,33 +10,30 @@ import {
   FormLabel,
   FormErrorMessage,
   useDisclosure,
+  useToast
 } from "@chakra-ui/react";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import SkeletonView from "./SkeletonView";
-import { NavigationContext } from "../Contexts";
 import { BASE_URL } from "../common/api";
 import { postForm } from "../common/api";
 import { useForm } from "react-hook-form";
 import ConfirmDialog from "./ConfirmDialog";
 
-function TaskDetail({ openTask, taskDetail }) {
+function TaskDetail({ onBack, taskDetail }) {
+  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setLoading] = useState(true);
   const [dialogHeading, setDialogHeading] = useState(true);
   const [approved, setApproval] = useState(false);
-
-  const { openNav } = useContext(NavigationContext);
-
   useEffect(() => {
     setLoading(false);
   }, []);
 
-  const onBack = () => {
-    openTask(false);
-    openNav(true);
-  };
-
-  const onSubmit = (setuju) => {
+  const onSubmit = async (setuju) => {
+    const result = await trigger();
+    if (!result) {
+      return;
+    }
     if (setuju) {
       setDialogHeading("Approve Task");
     } else {
@@ -46,14 +43,47 @@ function TaskDetail({ openTask, taskDetail }) {
     onOpen();
   };
 
-  const onConfirm = () => {
-    if (approved) {
-      console.log("Approve task");
-    } else {
-      console.log("Reject task");
+  const onConfirm = async (event) => {
+    event.preventDefault();
+    try {
+      const result = await trigger();
+      if (!result) {
+        return;
+      }
+      setLoading(true);
+      let response;
+      if (approved) {
+        response = await postForm(`mgmt/approve/${taskDetail.id}`, getValues());
+      } else {
+        response = await postForm(`mgmt/reject/${taskDetail.id}`, getValues());
+      }
+      if (response.ok) {
+        toast({
+          position: "top",
+          title: "Perubahan berhasil disimpan.",
+          status: "success",
+          isClosable: true,
+        });
+        onBack();
+      } else {
+        toast({
+          position: "top",
+          title: "Terjadi kesalahan saat memproses data.",
+          status: "error",
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      toast({
+        position: "top",
+        title: error.message,
+        status: "error",
+        isClosable: true,
+      });
     }
-    onBack();
   };
+
+  const handleSubmit = async (event) => {};
 
   const {
     register,
@@ -68,7 +98,12 @@ function TaskDetail({ openTask, taskDetail }) {
         <SkeletonView />
       ) : (
         <>
-          <ConfirmDialog isOpen={isOpen} onClose={onClose} onConfirm={onConfirm} title={dialogHeading} />
+          <ConfirmDialog
+            isOpen={isOpen}
+            onClose={onClose}
+            onConfirm={onConfirm}
+            title={dialogHeading}
+          />
           <VStack w="100%" h="100%" p={5}>
             <Box w="100%" flex="1">
               <VStack w="100%">
@@ -90,7 +125,7 @@ function TaskDetail({ openTask, taskDetail }) {
               </VStack>
               <Flex p={3} w="100%" justifyContent="center">
                 <Image
-                  src={`${BASE_URL}file/open/D3oMc6JhtW8SqLrZIKAQzXFfR42sEPvCm9ygN7TG`}
+                  src={`${BASE_URL}file/open/${taskDetail.file_id}`}
                   alt="Loading..."
                   w="80%"
                 />
@@ -104,16 +139,22 @@ function TaskDetail({ openTask, taskDetail }) {
                   value={taskDetail?.keterangan}
                 />
               </FormControl>
-              <FormControl isInvalid={errors.ket}>
+              <FormControl isInvalid={errors.amount}>
                 <FormLabel>Nominal</FormLabel>
                 <Input
                   type="text"
-                  {...register("ket")}
-                  onBlur={() => trigger("ket")}
+                  {...register("amount", {
+                    required: "Nominal tidak boleh kosong",
+                    pattern: {
+                      value: /^[0-9]*$/,
+                      message: "Nominal harus berupa angka",
+                    },
+                  })}
+                  onBlur={() => trigger("amount")}
                   focusBorderColor="orange.400"
                 />
                 <FormErrorMessage>
-                  {errors.ket && errors.ket.message}
+                  {errors.amount && errors.amount.message}
                 </FormErrorMessage>
               </FormControl>
             </Box>
