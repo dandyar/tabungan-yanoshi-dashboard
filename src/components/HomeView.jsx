@@ -19,7 +19,8 @@ import TaskDetail from "./TaskDetail";
 import { NavigationContext } from "../Contexts";
 
 const HomeView = ({ tasks }) => {
-  const [taskOpened, openTask] = useState(false);
+  const [taskOpened, openTask] = useState(null);
+  const [taskDetail, setTaskDetail] = useState(false);
   const { openNav } = useContext(NavigationContext);
 
   const formatDate = (date) => {
@@ -34,8 +35,9 @@ const HomeView = ({ tasks }) => {
     return number.replace(/\B(?=(?=\d*\.)(\d{3})+(?!\d))/g, ",");
   }
 
-  const showTaskDetail = (taskId) => {
-    console.log("open task: " + taskId);
+  const showTaskDetail = (task) => {
+    console.log("open task: " + task.id);
+    setTaskDetail(task);
     openTask(true);
     openNav(false);
   };
@@ -43,7 +45,7 @@ const HomeView = ({ tasks }) => {
   return (
     <>
       {taskOpened ? (
-        <TaskDetail openTask={openTask} />
+        <TaskDetail openTask={openTask} taskDetail={taskDetail} />
       ) : (
         <VStack w="100%" p={5} pt="2rem">
           <Flex w="100%" gap="15px">
@@ -72,7 +74,7 @@ const HomeView = ({ tasks }) => {
                   borderRadius="3xl"
                   key={item.id}
                 >
-                  <CardBody onClick={() => showTaskDetail(item.id)}>
+                  <CardBody onClick={() => showTaskDetail(item)}>
                     <Flex justifyContent="space-between">
                       <Box>
                         <Heading size="xs" textTransform="uppercase">

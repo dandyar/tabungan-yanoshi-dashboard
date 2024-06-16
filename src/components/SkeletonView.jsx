@@ -3,7 +3,6 @@ import {
   Skeleton,
   VStack
 } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
 
 function SkeletonView() {
   return (
