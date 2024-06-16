@@ -17,7 +17,7 @@ const MobileView = ({ children }) => {
         boxShadow="lg"
       >
         <VStack height="100%" gap='0'>
-          <Box w='100%' flex="1" overflow="hidden">
+          <Box id="content" w='100%' flex="1" overflow="hidden">
             <Box height="100%" overflow="auto">
               {children}
             </Box>

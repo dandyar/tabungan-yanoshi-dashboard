@@ -16,13 +16,13 @@ const App = () => {
   const [dashboard, setDashboard] = useState(null);
   const [user, setUser] = useState(null);
   const [isLoading, setLoading] = useState(true);
+  const [navOpened, openNav] = useState(true);
 
   const handleScreenChange = (screen) => {
     setCurrentScreen(screen);
   };
 
   const fetchData = async () => {
-    setLoading(true);
     try {
       const getMembers = await get("mgmt/members");
       const members = await getMembers.json();
@@ -57,7 +57,7 @@ const App = () => {
         <SkeletonView />
       ) : (
         <NavigationContext.Provider
-          value={{ handleScreenChange, currentScreen }}
+          value={{ handleScreenChange, currentScreen, navOpened, openNav }}
         >
           <MobileView>
             {currentScreen === "tasks" && <HomeView tasks={tasks} />}
