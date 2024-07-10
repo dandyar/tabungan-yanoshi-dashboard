@@ -31,7 +31,7 @@ const MobileNav = () => {
   return (
     <>
       {navOpened && (
-        <Box width="100%" bg={bgColor}>
+        <Box width="100%" bg={bgColor} position='fixed' left='0' bottom='0'>
           <Flex justify="space-around" padding="10px 0">
             {navItems.map((item, index) => (
               <Stack key={index} align="center">
