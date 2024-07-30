@@ -12,6 +12,7 @@ import React, { useState, useContext } from "react";
 import { Search2Icon } from "@chakra-ui/icons";
 import { NavigationContext } from "../Contexts";
 import MemberDetail from "./MemberDetail";
+import MemberDataTable from "./MemberDataTable";
 
 const MemberView = ({ members }) => {
   const [memberDetail, loadMemberDetail] = useState(null);
@@ -57,36 +58,9 @@ const MemberView = ({ members }) => {
             </Text>
           </Flex>
 
+
           {members && members.length > 0 ? (
-            <Stack spacing="2" width="100%">
-              {members.map((item) => (
-                <Card
-                  w="100%"
-                  variant="outline"
-                  border="none"
-                  borderRadius="3xl"
-                  key={item.id}
-                >
-                  <CardBody onClick={() => showDetail(item)}>
-                    <Flex justifyContent="space-between">
-                      <Box>
-                        <Heading size="xs" textTransform="uppercase">
-                          {item?.nama_lengkap}
-                        </Heading>
-                        <Text pt="2" fontSize="sm">
-                          Since {formatDate(item.created_at)}
-                        </Text>
-                      </Box>
-                      <Flex alignItems="center">
-                        <Text textColor="blue.300" fontWeight="semibold">
-                          {item?.status}
-                        </Text>
-                      </Flex>
-                    </Flex>
-                  </CardBody>
-                </Card>
-              ))}
-            </Stack>
+            <MemberDataTable data={members} onShowDetail={showDetail} />
           ) : (
             <Text textAlign="center" textColor="gray.600" fontStyle="italic">
               No data

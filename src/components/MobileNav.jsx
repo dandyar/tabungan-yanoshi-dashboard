@@ -31,31 +31,37 @@ const MobileNav = () => {
   return (
     <>
       {navOpened && (
-        <Box width="100%" bg={bgColor} position='fixed' left='0' bottom='0'>
-          <Flex justify="space-around" padding="10px 0">
-            {navItems.map((item, index) => (
-              <Stack key={index} align="center">
-                <Button
-                  key={index}
-                  variant="ghost"
-                  size="lg"
-                  flexDirection="column"
-                  color={iconColor}
-                  _hover={{ color: "orange.600" }}
-                  _active={{
-                    bg: "transparent",
-                    textColor: "orange.500",
-                  }}
-                  onClick={() => handleScreenChange(item.target)}
-                  isActive={currentScreen === item.target}
-                  gap="5px"
-                >
-                  {item.icon}
-                  <Text fontSize="sm">{item.label}</Text>
-                </Button>
-              </Stack>
-            ))}
-          </Flex>
+        <Box
+          width="245px"
+          height="100%"
+          bg={bgColor}
+          position="fixed"
+          left="0"
+          bottom="0"
+          padding={5}
+        >
+          {navItems.map((item, index) => (
+            <Flex key={index} align="center">
+              {item.icon}
+              <Button
+                key={index}
+                variant="ghost"
+                size="lg"
+                flexDirection="column"
+                color={iconColor}
+                _hover={{ color: "orange.600" }}
+                _active={{
+                  bg: "transparent",
+                  textColor: "orange.500",
+                }}
+                onClick={() => handleScreenChange(item.target)}
+                isActive={currentScreen === item.target}
+                gap="5px"
+              >
+                <Text fontSize="sm">{item.label}</Text>
+              </Button>
+            </Flex>
+          ))}
         </Box>
       )}
     </>

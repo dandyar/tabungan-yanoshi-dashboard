@@ -1,29 +1,24 @@
-import {
-    Button,
-    Flex,
-    Text,
-    VStack
-  } from "@chakra-ui/react";
-  import React from "react";
-  import { SettingsIcon } from "@chakra-ui/icons";
-  import { destroy } from "../common/api";
+import { Box, Button, Flex, Text, VStack } from "@chakra-ui/react";
+import React from "react";
+import { SettingsIcon } from "@chakra-ui/icons";
+import { destroy } from "../common/api";
 
-  const SettingsView = () => {
-
-    const onDestroy = async () => {
-      const res = await destroy("auth/signout");
-      if (res.ok) {
-        window.location.reload();
-      }
-    };
-  
-    function formatDate(dateTime) {
-      let dateOnly = dateTime.replace(/\s\d{2}:\d{2}:\d{2}/, "");
-      return dateOnly;
+const SettingsView = () => {
+  const onDestroy = async () => {
+    const res = await destroy("auth/signout");
+    if (res.ok) {
+      window.location.reload();
     }
+  };
 
-    return (
-      <VStack w="100%" p={5} pt="2rem">
+  function formatDate(dateTime) {
+    let dateOnly = dateTime.replace(/\s\d{2}:\d{2}:\d{2}/, "");
+    return dateOnly;
+  }
+
+  return (
+    <Box p={5} pt="2rem">
+      <VStack w="100%" mb={5}>
         <Flex w="100%" gap="15px">
           <Flex
             backgroundColor="orange"
@@ -39,19 +34,12 @@ import {
             Pengaturan
           </Text>
         </Flex>
-
-        <Button
-            borderRadius="full"
-            w="100%"
-            size="lg"
-            colorScheme="red"
-            onClick={onDestroy}
-          >
-            Sign out
-          </Button>
-  
       </VStack>
-    );
-  };
-  export default SettingsView;
-  
+
+      <Button borderRadius="full" w="20%" colorScheme="red" onClick={onDestroy}>
+        Sign out
+      </Button>
+    </Box>
+  );
+};
+export default SettingsView;

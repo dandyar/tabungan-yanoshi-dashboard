@@ -1,4 +1,5 @@
-export const BASE_URL = 'https://yanoshi-stokis.web.id/app/api/';
+export const BASE_URL = 'https://taperake.com/api/';
+// export const BASE_URL = 'http://localhost:8000/api/';
 
 export const get = async (path) => {
   const response = await fetch(`${BASE_URL}${path}`);
